@@ -14,6 +14,19 @@ import torch.optim as optim
 from tqdm import tqdm
 from sklearn.metrics import classification_report
 from sklearn.metrics import confusion_matrix
+import random
+from collections import defaultdict
+
+def set_seed(seed=42):
+    random.seed(seed)
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+    torch.cuda.manual_seed(seed)
+    torch.cuda.manual_seed_all(seed)
+    torch.backends.cudnn.deterministic = True
+    torch.backends.cudnn.benchmark = False
+
+set_seed(42)
 
 
 
@@ -151,8 +164,8 @@ test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=32, shuffle=F
 
 
 input_dim = 13  # Number of MFCC coefficients
-hidden_dim = 128  # Hidden dimension for LSTM
-num_layers = 2  # Number of LSTM layers
+hidden_dim = 38 # 20 # 32 # 128  # Hidden dimension for LSTM
+num_layers = 1  # Number of LSTM layers
 output_dim = 10  # Number of classes (digits 0-9)
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -236,9 +249,19 @@ print(f'Accuracy on test data: {accuracy:.2f}%')
 
 print(classification_report(all_labels, all_preds, digits=4))
 
+layer_params = defaultdict(str)
+for name, param in model.named_parameters():
+    layer_num = str(name)## int(name.split("_")[-1][1:])  # Extract layer number
+    layer_params[layer_num] = layer_params.get(layer_num, 0) + param.numel()
+
+print(layer_params)  # {0: 49408, 1: 33024} [1][4]
+
+# Calculate memory
+total_memory = sum(param.numel() for param in model.parameters()) * 4
+total_memory_in_kb = total_memory * 1024
+print(f"Total memory: {total_memory_in_kb/1e6:.2f} KB")  # 0.33 MB [2][4]
 
 conf_matrix = confusion_matrix(all_labels, all_preds)
-
 
 labels = [str(i) for i in range(10)]  # For digit classification (0–9)
 
@@ -255,9 +278,7 @@ fig = px.imshow(
 fig.update_layout(
     xaxis_title="Predicted Label",
     yaxis_title="True Label",
-    # width=600,
-    # height=600
 )
 
-fig.show()
+# fig.show()
 
