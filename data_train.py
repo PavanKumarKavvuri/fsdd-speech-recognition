@@ -12,6 +12,10 @@ import torch.nn as nn
 from sklearn.metrics import confusion_matrix, classification_report
 import torch.optim as optim
 from tqdm import tqdm
+from sklearn.metrics import classification_report
+from sklearn.metrics import confusion_matrix
+
+
 
 # 1. Prepare data list with (audio_path, label)
 def prepare_data_list(root_dir):
@@ -202,6 +206,9 @@ for epoch in range(num_epochs):
 correct = 0
 total = 0
 
+all_preds = []
+all_labels = []
+
 with torch.no_grad():
     for inputs, labels in test_loader:
         inputs = inputs.to(device)
@@ -210,7 +217,10 @@ with torch.no_grad():
         outputs = model(inputs)
         _, predicted = torch.max(outputs.data, 1)
 
-        print(f'Predicted: {predicted}, Labels: {labels}')
+        all_preds.extend(predicted.cpu().numpy())
+        all_labels.extend(labels.cpu().numpy())
+
+        # print(f'Predicted: {predicted}, Labels: {labels}')
         
         total += labels.size(0)
         correct += (predicted == labels).sum().item()
@@ -223,3 +233,31 @@ with torch.no_grad():
 
 accuracy = 100 * correct / total
 print(f'Accuracy on test data: {accuracy:.2f}%')
+
+print(classification_report(all_labels, all_preds, digits=4))
+
+
+conf_matrix = confusion_matrix(all_labels, all_preds)
+
+
+labels = [str(i) for i in range(10)]  # For digit classification (0–9)
+
+fig = px.imshow(
+    conf_matrix,
+    text_auto=True,
+    color_continuous_scale='Blues',
+    labels=dict(x="Predicted", y="True", color="Count"),
+    x=labels,
+    y=labels,
+    title="Confusion Matrix"
+)
+
+fig.update_layout(
+    xaxis_title="Predicted Label",
+    yaxis_title="True Label",
+    # width=600,
+    # height=600
+)
+
+fig.show()
+
