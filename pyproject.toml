@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "spoken_digits_project"
+version = "0.1.0"
+description = "Spoken digits recognition assignment"
+authors = [{ name = "Pavan Kumar Kavvuri", email = "kavvuripavankumar@gmail.com" }]
+readme = "README.md"
+requires-python = ">=3.8"
+dependencies = [
+    librosa==0.11.0
+    matplotlib==3.10.3
+    numpy==2.2.6
+    plotly==5.18.0
+    scikit_learn==1.6.1
+    soundfile==0.13.1
+    torch==2.7.0
+    torchaudio==2.7.0
+    tqdm==4.67.1
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]

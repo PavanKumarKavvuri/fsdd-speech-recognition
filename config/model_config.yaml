@@ -1,0 +1,51 @@
+# LSTM Model Configuration
+
+model:
+  name: "lstm_audio_classifier"
+  type: "LSTM"
+  input_dim: 13             # Number of MFCC coefficients
+  hidden_dim: 128            # LSTM hidden units, decided at run time for Tasks B & C
+  num_layers: 2             # Number of LSTM layers, decided at run time for Tasks B & C
+  output_dim: 10            # Digits 0-9
+  bidirectional: false
+  dropout_rate: 0.3
+
+training:
+  batch_size: 32
+  epochs: 20
+  learning_rate: 0.001
+  optimizer: "adam"
+  loss_function: "cross_entropy"
+  early_stopping: true
+  patience: 5
+
+data_splitting:
+  test_size: 0.2
+  random_state: 42
+
+dataset:
+  name: "Free Spoken Digits Dataset"
+  path: "/home/pavan/Music/spectrum/free-spoken-digit-dataset/recordings"
+  # sample_rate: None
+  # transform: "mfcc"   
+  preprocessing:
+    denoise: False
+  # augmentations:
+  #   time_shift: true
+  #   noise_injection: true
+  #   pitch_shift: false
+
+output:
+  save_dir: "outputs/models/"
+  log_dir: "outputs/logs/"
+  save_best_model: true
+  model_filename: "lstm_audio_classifier.pt"
+
+hardware:
+  device: "cuda"
+
+hardware_constraints:
+  memory_size_limit: 36  # in KB
+
+experiment:
+  seed: 42

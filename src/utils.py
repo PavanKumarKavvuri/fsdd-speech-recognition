@@ -1,0 +1,70 @@
+import random
+import numpy as np
+import torch
+import os
+from typing import List, Tuple
+import tempfile
+from torch.nn import Module
+
+def set_seed(seed: int = 42) -> None:
+    """
+    Set random seed for reproducibility across `random`, `numpy`, and `torch`.
+
+    Args:
+        seed (int): The seed value to use. Default is 42.
+
+    Returns:
+        None
+    """
+    random.seed(seed)
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+    torch.cuda.manual_seed(seed)
+    torch.cuda.manual_seed_all(seed)
+
+    torch.backends.cudnn.deterministic = True
+    torch.backends.cudnn.benchmark = False
+
+    print(f"[INFO] Random seed set to: {seed}")
+
+
+def prepare_data_label_pairs(root_dir: str) -> List[Tuple[str, int]]:
+    """
+    Scans a directory for .wav files and returns a list of (audio_path, label) tuples.
+
+    Assumes filenames are in the format: <label>_<otherinfo>.wav
+
+    Args:
+        root_dir (str): Path to the directory containing audio files.
+
+    Returns:
+        List[Tuple[str, int]]: List of (file_path, label) pairs.
+    """
+    data = []
+    for filename in os.listdir(root_dir):
+        if filename.endswith('.wav'):
+            try:
+                label = int(filename.split('_')[0])  # Extract label before first underscore
+                path = os.path.join(root_dir, filename)
+                data.append((path, label))
+            except ValueError:
+                print(f"[WARNING] Skipping file with invalid label format: {filename}")
+    return data
+
+
+def get_model_size_in_kb(model: Module) -> float:
+    """
+    Calculates the size of a PyTorch model in kilobytes.
+
+    Args:
+        model (torch.nn.Module): The PyTorch model to evaluate.
+
+    Returns:
+        float: Model size in kilobytes (KB).
+    """
+    with tempfile.NamedTemporaryFile(delete=True) as tmp:
+        torch.save(model.state_dict(), tmp.name)
+        model_size_kb = os.path.getsize(tmp.name) / 1024
+    return model_size_kb
+
+

@@ -12,8 +12,6 @@ import torch.nn as nn
 from sklearn.metrics import confusion_matrix, classification_report
 import torch.optim as optim
 from tqdm import tqdm
-from sklearn.metrics import classification_report
-from sklearn.metrics import confusion_matrix
 import random
 from collections import defaultdict
 
@@ -42,7 +40,7 @@ def prepare_data_list(root_dir):
 
 # 2. Dataset class
 class SpokenDigitDataset(torch.utils.data.Dataset):
-    def __init__(self, data, transform=None, denoise_data=True, sample_rate=8000):
+    def __init__(self, data, transform=None, denoise_data=False, sample_rate=8000):
         self.data = data
         self.transform = transform
         self.denoise_data = denoise_data
