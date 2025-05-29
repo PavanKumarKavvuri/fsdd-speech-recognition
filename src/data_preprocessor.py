@@ -4,7 +4,7 @@ import torch.nn.functional as F
 import torchaudio.transforms as T
 
 # 2. Dataset class
-class SpokenDigitDataset(torch.utils.data.Dataset):
+class AudioFeaturesDataset(torch.utils.data.Dataset):
     def __init__(self, data, transform=None, denoise_data=False, sample_rate=8000):
         self.data = data
         self.transform = transform

@@ -2,10 +2,11 @@ import random
 import numpy as np
 import torch
 import os
-from typing import List, Tuple
+from typing import List, Tuple, Any
 import tempfile
 from torch.nn import Module
 from collections import defaultdict
+import yaml
 
 def set_seed(seed: int = 42) -> None:
     """
@@ -88,3 +89,25 @@ def get_model_params_size(model: Module):
     print(f"Estimated Memory: {total_memory_kb:.2f} KB ({total_memory_mb:.2f} MB)")
 
     return dict(layer_params), total_memory_kb
+
+def read_yaml_file(file_path: str) -> Any:
+    """
+    Reads a YAML file and returns its content as a Python dictionary or list.
+
+    Args:
+        file_path (str): Path to the YAML file.
+
+    Returns:
+        Any: Parsed YAML content (usually dict or list).
+    """
+    try:
+        with open(file_path, "r") as f:
+            yaml_content = yaml.safe_load(f)
+        return yaml_content
+    except FileNotFoundError:
+        print(f"❌ File not found: {file_path}")
+    except yaml.YAMLError as e:
+        print(f"⚠️ YAML parsing error in {file_path}:\n{e}")
+    except Exception as e:
+        print(f"🚨 Unexpected error reading {file_path}:\n{e}")
+
