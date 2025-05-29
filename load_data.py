@@ -11,8 +11,8 @@ import numpy as np
 import torch.nn.functional as F
 
 
-show_plot = True
-
+show_plot = False
+denoise_data = False
 percentile_of_timesteps = 99
 
 # Load the audio file at a fixed sampling rate (e.g., 8000 Hz)
@@ -23,9 +23,29 @@ channels_list = []
 duration_list = []
 time_steps_list = []
 
+encoded_labels = []
+
+
 recordings_path = '/home/pavan/Music/spectrum/Innatera/recordings/'
 recordings_list = [os.path.join(recordings_path, f) for f in os.listdir(recordings_path) if f.endswith('.wav')]
 print(len(recordings_list))
+
+def apply_bandpass_filter(waveform, sample_rate):
+    """
+    Applies bandpass filter (300–3000 Hz) and gain normalization to the waveform.
+    Returns the processed waveform.
+    """
+    effects = [
+        ['bandpass', '300', '3000'],  # speech frequency range
+        ['gain', '-n']                # normalize to 0 dB
+    ]
+
+    processed_waveform, _ = torchaudio.sox_effects.apply_effects_tensor(
+        waveform, sample_rate, effects
+    )
+
+    return processed_waveform
+
 
 def pad_or_trim_mfcc(mfcc, max_len=36):
     """
@@ -58,10 +78,19 @@ def pad_or_trim_mfcc(mfcc, max_len=36):
 # ## Obtain the the raw temporal structure of the sound.
 for recording in recordings_list[:]:
 
+    filename = os.path.basename(recording)
+    label = int(filename.split('_')[0])  
+    encoded_labels.append(label)
+
     ## Waveform represents air pressure variations over time
     waveform, samplerate = torchaudio.load(recording)
 
+    # Apply noise reduction preprocessing
+    if denoise_data:
+        waveform = apply_bandpass_filter(waveform, samplerate)
+
     waveform = waveform / waveform.abs().max()
+
     # print(waveform.min(), waveform.max())
 
     # print(waveform.shape[1], len(waveform[0]))
@@ -95,6 +124,49 @@ for recording in recordings_list[:]:
         time_steps_list.append(updated_t_steps)
     else:
         print(updated_mfcc_features.shape)
+
+
+
+unique_labels = sorted(set(encoded_labels))
+print("Unique labels found:", unique_labels)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 # Percentiles to calculate

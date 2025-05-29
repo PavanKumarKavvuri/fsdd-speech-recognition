@@ -42,7 +42,7 @@ def prepare_data_list(root_dir):
 
 # 2. Dataset class
 class SpokenDigitDataset(torch.utils.data.Dataset):
-    def __init__(self, data, transform=None, denoise_data=False, sample_rate=8000):
+    def __init__(self, data, transform=None, denoise_data=True, sample_rate=8000):
         self.data = data
         self.transform = transform
         self.denoise_data = denoise_data
@@ -142,6 +142,20 @@ class LSTMClassifier(nn.Module):
 
         return out
 
+def power_of_two_quantize(tensor):
+    epsilon = 1e-8
+    signs = torch.sign(tensor)
+    tensor_abs = torch.abs(tensor) + epsilon
+    log2 = torch.log2(tensor_abs)
+    rounded_log2 = torch.round(log2)
+    quantized_abs = torch.pow(2.0, rounded_log2)
+    return quantized_abs * signs
+
+def apply_power_of_two_quantization(model):
+    for name, param in model.named_parameters():
+        if 'weight' in name or 'bias' in name:  # You can skip biases if needed
+            with torch.no_grad():
+                param.copy_(power_of_two_quantize(param))
 
 
 # 3. Use it:
@@ -178,7 +192,7 @@ model = LSTMClassifier(input_dim=input_dim,
 criterion = nn.CrossEntropyLoss()
 optimizer = optim.Adam(model.parameters(), lr=0.001)
 
-num_epochs = 20
+num_epochs =  20
 
 for epoch in range(num_epochs):
     model.train()
@@ -214,38 +228,92 @@ for epoch in range(num_epochs):
     print(f"Epoch [{epoch+1}/{num_epochs}], Loss: {running_loss:.4f}, Training Accuracy: {accuracy:.2f}%")
 
 
+model.eval()
 
+import tempfile
+
+with tempfile.NamedTemporaryFile(delete=True) as tmp:
+    torch.save(model.state_dict(), tmp.name)
+    model_size_kb = os.path.getsize(tmp.name) / 1024
+    print(f"model size: {model_size_kb:.2f} KB")
 
 correct = 0
 total = 0
+quantized_correct = 0
 
 all_preds = []
 all_labels = []
 
 with torch.no_grad():
-    for inputs, labels in test_loader:
-        inputs = inputs.to(device)
-        labels = labels.to(device)
+    for inputs__, labels__ in test_loader:
+        inputs = inputs__.to(device)
+        labels = labels__.to(device)
         
         outputs = model(inputs)
         _, predicted = torch.max(outputs.data, 1)
 
         all_preds.extend(predicted.cpu().numpy())
         all_labels.extend(labels.cpu().numpy())
-
-        # print(f'Predicted: {predicted}, Labels: {labels}')
         
         total += labels.size(0)
         correct += (predicted == labels).sum().item()
+
+
+apply_power_of_two_quantization(model)
+
+# Evaluate on test set
+correct = 0
+total = 0
+
+with torch.no_grad():
+    for inputs, labels in test_loader:
+        inputs, labels = inputs.to(device), labels.to(device)
+        outputs = model(inputs)
+        _, predicted = torch.max(outputs.data, 1)
+        total += labels.size(0)
+        correct += (predicted == labels).sum().item()
+
+quantized_accuracy = 100 * correct / total
+print(f'Power-of-2 Quantized Accuracy: {quantized_accuracy:.2f}%')
+
+
+model_cpu = model.to('cpu') 
+# Apply dynamic quantization to the entire model or just LSTM/Linear layers
+quantized_model = torch.quantization.quantize_dynamic(
+    model_cpu,  # the model instance
+    {nn.LSTM, nn.Linear},  # layers to quantize
+    dtype=torch.qint8  # quantize to 8-bit integers
+)
+
+quantized_model.eval()
+
+# Save quantized model temporarily
+with tempfile.NamedTemporaryFile(delete=True) as tmp:
+    torch.save(quantized_model.state_dict(), tmp.name)
+    quantized_model_size_kb = os.path.getsize(tmp.name) / 1024
+    print(f"Quantized model size: {quantized_model_size_kb:.2f} KB")
+
+quantized_correct = 0
+
+with torch.no_grad():
+    for inputs__, labels__ in test_loader:
+
+        inputs_cpu = inputs__.to('cpu')  # Move input to CPU
+        labels_cpu = labels__.to('cpu')
     
-    print(outputs.shape)      # Should be [batch_size, num_classes]
-    print(labels.shape)       # Should be [batch_size]
-    print(predicted[:5])      # Check predicted class indices
-    print(labels[:5])         # Check actual class indices
+        quantized_outputs = quantized_model(inputs_cpu)
+        _, quantized_predicted = torch.max(quantized_outputs.data, 1)
+
+        quantized_correct += (quantized_predicted == labels_cpu).sum().item()
 
 
 accuracy = 100 * correct / total
 print(f'Accuracy on test data: {accuracy:.2f}%')
+
+quantized_accuracy = 100 * quantized_correct / total 
+print(f'Quantized Accuracy on test data: {quantized_accuracy:.2f}%')
+
+print(f"Size reduction: {100 * (1 - (quantized_model_size_kb / model_size_kb)):.2f}%")
 
 print(classification_report(all_labels, all_preds, digits=4))
 
@@ -280,5 +348,5 @@ fig.update_layout(
     yaxis_title="True Label",
 )
 
-# fig.show()
+# # fig.show()
 
