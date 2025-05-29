@@ -14,6 +14,8 @@ import torch.optim as optim
 from tqdm import tqdm
 import random
 from collections import defaultdict
+from src.train import LSTMClassifier
+from src.utils import get_model_params_size
 
 def set_seed(seed=42):
     random.seed(seed)

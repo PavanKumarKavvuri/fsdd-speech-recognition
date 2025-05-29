@@ -5,6 +5,7 @@ import os
 from typing import List, Tuple
 import tempfile
 from torch.nn import Module
+from collections import defaultdict
 
 def set_seed(seed: int = 42) -> None:
     """
@@ -67,4 +68,23 @@ def get_model_size_in_kb(model: Module) -> float:
         model_size_kb = os.path.getsize(tmp.name) / 1024
     return model_size_kb
 
+def get_model_params_size(model: Module):
+    layer_params = defaultdict(int)
 
+    for name, param in model.named_parameters():
+        layer_params[name] += param.numel()
+
+    total_params = sum(param.numel() for param in model.parameters())
+    total_memory_bytes = total_params * 4 
+    total_memory_kb = total_memory_bytes / 1024
+    total_memory_mb = total_memory_kb / 1024
+
+    # Optionally pretty print each layer
+    print("\nLayer-wise parameter counts:")
+    for layer, count in layer_params.items():
+        print(f"{layer:30} -> {count:,} params")
+
+    print(f"\n\n Total Parameters: {total_params:,}")
+    print(f"Estimated Memory: {total_memory_kb:.2f} KB ({total_memory_mb:.2f} MB)")
+
+    return dict(layer_params), total_memory_kb
