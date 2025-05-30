@@ -40,8 +40,8 @@ class ModelEvaluator:
             print("\n Confusion Matrix:")
             print(confusion_matrix(all_labels, all_preds))
 
-        return {
-            "accuracy": accuracy,
-            "predictions": np.array(all_preds),
-            "labels": np.array(all_labels)
-        }
+        # return {
+        #     "accuracy": accuracy,
+        #     "predictions": np.array(all_preds),
+        #     "labels": np.array(all_labels)
+        # }

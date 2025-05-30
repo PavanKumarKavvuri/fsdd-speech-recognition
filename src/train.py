@@ -12,7 +12,6 @@ class ModelTrainer:
 
         self.criterion = nn.CrossEntropyLoss()
         self.optimizer = optim.Adam(self.model.parameters(), lr=self.learning_rate)
-        print("Training INitialised")
 
     def train(self):
         for epoch in range(self.epochs):
