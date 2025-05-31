@@ -3,7 +3,6 @@ import torchaudio
 import torch.nn.functional as F
 import torchaudio.transforms as T
 
-# 2. Dataset class
 class AudioFeaturesDataset(torch.utils.data.Dataset):
     def __init__(self, data, transform=None, denoise_data=False, sample_rate=8000):
         self.data = data
@@ -77,5 +76,3 @@ class AudioFeaturesDataset(torch.utils.data.Dataset):
         updated_mfcc_features = self.pad_or_trim_mfcc(mfcc_features)
 
         return updated_mfcc_features, label
-
-# --

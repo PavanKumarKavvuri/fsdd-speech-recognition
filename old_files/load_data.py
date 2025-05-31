@@ -11,7 +11,7 @@ import numpy as np
 import torch.nn.functional as F
 
 
-show_plot = False
+show_plot = True
 denoise_data = False
 percentile_of_timesteps = 99
 
