@@ -30,28 +30,71 @@ def set_seed(seed: int = 42) -> None:
     print(f"[INFO] Random seed set to: {seed}")
 
 
-def prepare_data_label_pairs(root_dir: str) -> List[Tuple[str, int]]:
-    """
-    Scans a directory for .wav files and returns a list of (audio_path, label) tuples.
+# def prepare_data_label_pairs(root_dir: str) -> List[Tuple[str, int]]:
+#     """
+#     Scans a directory for .wav files and returns a list of (audio_path, label) tuples.
 
-    Assumes filenames are in the format: <label>_<otherinfo>.wav
+#     Assumes filenames are in the format: <label>_<otherinfo>.wav
+
+#     Args:
+#         root_dir (str): Path to the directory containing audio files.
+
+#     Returns:
+#         List[Tuple[str, int]]: List of (file_path, label) pairs.
+#     """
+#     data = []
+#     for filename in os.listdir(root_dir):
+#         if filename.endswith('.wav'):
+#             try:
+#                 label = int(filename.split('_')[0])  # Extract label before first underscore
+#                 path = os.path.join(root_dir, filename)
+#                 data.append((path, label))
+#             except ValueError:
+#                 print(f"[WARNING] Skipping file with invalid label format: {filename}")
+#     return data
+
+
+def prepare_data_label_pairs(root_dir: str, calibration_samples_per_class: int = 10) -> Tuple[List[Tuple[str, int]], List[Tuple[str, int]]]:
+    """
+    Scans a directory for .wav files and returns:
+    1. A list of all (audio_path, label) pairs
+    2. A filtered list containing up to N samples per digit class
+
+    Assumes filenames are in the format: <digit>_<speaker>_<id>.wav
 
     Args:
         root_dir (str): Path to the directory containing audio files.
+        samples_per_class (int): Number of samples to collect per digit class in the limited list.
 
     Returns:
-        List[Tuple[str, int]]: List of (file_path, label) pairs.
+        Tuple[List[Tuple[str, int]], List[Tuple[str, int]]]: 
+            - Full list of (file_path, label)
+            - Limited list with N samples per class
     """
     data = []
-    for filename in os.listdir(root_dir):
+    limited_data = []
+    label_counts = defaultdict(int)
+
+    for filename in sorted(os.listdir(root_dir)):
         if filename.endswith('.wav'):
+            parts = filename.split('_')
+            if len(parts) < 3:
+                print(f"[WARNING] Skipping file with unexpected format: {filename}")
+                continue
             try:
-                label = int(filename.split('_')[0])  # Extract label before first underscore
+                label = int(parts[0])
                 path = os.path.join(root_dir, filename)
-                data.append((path, label))
+                data.append((path, label))  # ✅ always populate the full list
+
+                # Populate limited_data only up to N samples/class
+                if 0 <= label <= 9 and label_counts[label] < calibration_samples_per_class:
+                    limited_data.append((path, label))
+                    label_counts[label] += 1
+
             except ValueError:
-                print(f"[WARNING] Skipping file with invalid label format: {filename}")
-    return data
+                print(f"[WARNING] Skipping file with invalid label: {filename}")
+
+    return data, limited_data
 
 
 def get_model_size_in_kb(model: Module) -> float:
