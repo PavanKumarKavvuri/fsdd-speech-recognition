@@ -28,10 +28,10 @@ The project follows the three tasks outlined in the assignment:
 
 | Model Variant                     | Accuracy | Model Size | Inference time 
 |-----------------------------------|----------|------------|----------|
-| Baseline (float32)                | 93.17%   | 35.38 KB   | 93.17%   |
-| Memory Constrained (float32)      | 93.33%   | 13.00 KB   | 93.33%   |
-| Quantized (int8)                  | 93.33%   | 13.00 KB   | 93.33%   |
-| Power-of-2 Quantized              | *Tuned*  | *< 36 KB*  | *Tuned*  |
+| Baseline (float32)                | 99.00%   | 807.04 KB   | --   |
+| Memory Constrained (float32)      | 93.33%   | 13.00 KB   | --   |
+| Quantized (int8)                  | 93.33%   | 13.00 KB   | --   |
+| Power-of-2 Quantized              | *Tuned*  | *< 36 KB*  | --  |
 
 
 ---

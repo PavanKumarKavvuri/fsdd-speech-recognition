@@ -62,10 +62,10 @@ pip install -r requirements.txt
 
 After installation, you can start by:
 - Running audio data inspection: `jupyter notebook notebooks/audio_data_analysis.ipynb`
-- Task A: `jupyter notebook notebooks/audio_data_analysis.ipynb`
-- Task B(Memory Constraint): `jupyter notebook notebooks/audio_data_analysis.ipynb`
-- Task B(Int8 Quantisation): `jupyter notebook notebooks/audio_data_analysis.ipynb`
-- Task C(Po2 Quantisation): `jupyter notebook notebooks/audio_data_analysis.ipynb`
+- Task A: `jupyter notebook notebooks/Task-A.ipynb`
+- Task B(Memory Constraint): `jupyter notebook notebooks/Task-B-Part-1.ipynb`
+- Task B(Int8 Quantisation): `jupyter notebook notebooks/Task-B-Part-2.ipynb`
+- Task C(Po2 Quantisation): `jupyter notebook notebooks/Task-B-Part-2.ipynb` (not a separate file rather continued Task-C in Task-B-Part-2)
 
 
 
