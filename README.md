@@ -33,3 +33,26 @@ The project follows the three tasks outlined in the assignment:
 | Quantized (int8)                  | 93.33%   | 13.00 KB   | 93.33%   |
 | Power-of-2 Quantized              | *Tuned*  | *< 36 KB*  | *Tuned*  |
 
+
+---
+
+## Detailed Implementations
+
+To validate the results shown above and demonstrate how each task was tackled, refer to the following Jupyter notebooks:
+
+- **Task A:**  
+  [`Training Without Constraints`](notebooks/01_train_unconstrained.ipynb)  
+
+- **Task B:**  
+  [`Memory-Constrained Training (≤36 KB)`](notebooks/02_train_memory_constrained.ipynb)  
+
+- **Task B:**  
+  [`No Floating Point / Int8 Quantized Model:`](notebooks/03_quantization.ipynb)  
+
+- **Task C:**  
+  [`Power of Two Quantized Model:`](notebooks/03_quantization.ipynb)
+
+
+These notebooks include full training loops, model summaries, memory profiling, and visualizations to support the results presented.
+
+## Installation Instructions
