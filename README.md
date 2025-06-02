@@ -55,4 +55,10 @@ To validate the results shown above and demonstrate how each task was tackled, r
 
 These notebooks include full training loops, model summaries, memory profiling, and visualizations to support the results presented.
 
-## Installation Instructions
+---
+
+## Installation & Setup
+
+To set up the environment and install dependencies, please follow the step-by-step instructions in:
+
+[`docs/INSTALL.md`](docs/INSTALL.md)
