@@ -11,9 +11,6 @@ The project follows the three tasks outlined in the assignment:
 | **Task C** | Further constrain the model so that all weight parameters are **powers of two**, mimicking hardware-friendly computation |
 
 
-
-
-
 ## Features & Methods Used
 
 - **Samples metadata inspection** using `plotly` (channels, sample rates, durations)
@@ -25,4 +22,14 @@ The project follows the three tasks outlined in the assignment:
 - **Power-of-2 weight quantization** (an inspired implementation)
 - **Model size analysis** using `model.named_parameters()`
 - **Classification report and confusion matrix visualization** with `sklearn` and `plotly`
+
+
+## Sample Results
+
+| Model Variant                     | Accuracy | Model Size | Inference time 
+|-----------------------------------|----------|------------|----------|
+| Baseline (float32)                | 93.17%   | 35.38 KB   | 93.17%   |
+| Memory Constrained (float32)      | 93.33%   | 13.00 KB   | 93.33%   |
+| Quantized (int8)                  | 93.33%   | 13.00 KB   | 93.33%   |
+| Power-of-2 Quantized              | *Tuned*  | *< 36 KB*  | *Tuned*  |
 
