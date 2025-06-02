@@ -41,7 +41,7 @@ The project follows the three tasks outlined in the assignment:
 To validate the results shown above and demonstrate how each task was tackled, refer to the following Jupyter notebooks:
 
 - **Task A:**  
-  [`Training Without Constraints`](notebooks/innatera-task-a.ipynb)  
+  [`Training Without Constraints`](notebooks/Task-A.ipynb)  
 
 - **Task B:**  
   [`Memory-Constrained Training (≤36 KB)`](notebooks/TASK-B.ipynb)  
