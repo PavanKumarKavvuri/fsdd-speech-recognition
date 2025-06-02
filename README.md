@@ -41,16 +41,16 @@ The project follows the three tasks outlined in the assignment:
 To validate the results shown above and demonstrate how each task was tackled, refer to the following Jupyter notebooks:
 
 - **Task A:**  
-  [`Training Without Constraints`](notebooks/01_train_unconstrained.ipynb)  
+  [`Training Without Constraints`](notebooks/innatera-task-a.ipynb)  
 
 - **Task B:**  
-  [`Memory-Constrained Training (≤36 KB)`](notebooks/02_train_memory_constrained.ipynb)  
+  [`Memory-Constrained Training (≤36 KB)`](notebooks/TASK-B.ipynb)  
 
 - **Task B:**  
-  [`No Floating Point / Int8 Quantized Model:`](notebooks/03_quantization.ipynb)  
+  [`No Floating Point / Int8 Quantized Model:`](notebooks/TASK-B-Part-2.ipynb)  
 
 - **Task C:**  
-  [`Power of Two Quantized Model:`](notebooks/03_quantization.ipynb)
+  [`Power of Two Quantized Model:`](notebooks/TASK-B-Part-2.ipynb)
 
 
 These notebooks include full training loops, model summaries, memory profiling, and visualizations to support the results presented.
@@ -61,4 +61,4 @@ These notebooks include full training loops, model summaries, memory profiling, 
 
 To set up the environment and install dependencies, please follow the step-by-step instructions in:
 
-[`docs/INSTALL.md`](docs/INSTALL.md)
+[`docs/INSTALL.md`](docs/install.md)
