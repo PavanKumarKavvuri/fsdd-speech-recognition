@@ -1,8 +1,13 @@
 # RNN based Spoken Digits Classifier 
 
-This repository contains my submission for the **Innatera Staff Embedded Neuromorphic Applications Engineer** home assignment. The goal was to train and optimize an RNN-based classifier on the **Free Spoken Digits Dataset (FSDD)**, under increasingly strict hardware constraints.
+This repository contains my submission for the **Innatera Staff Embedded Neuromorphic Applications Engineer** home assignment. The goal was to train and optimize an RNN-based classifier on the **Free Spoken Digits Dataset (FSDD)** using PyTorch, under increasingly strict hardware constraints.
 
 The project follows the three tasks outlined in the assignment:
-1. Train a model without constraints
-2. Retrain under memory and fixed-point constraints
-3. Retrain with power-of-two quantized weights
+
+| Task | Objective |
+|------|-----------|
+| **Task A** | Train a high-performing RNN model on FSDD with any preprocessing or architecture choice |
+| **Task B** | Adapt the network to fit within **36kB of memory** and run in **fixed-point precision** |
+| **Task C** | Further constrain the model so that all weight parameters are **powers of two**, mimicking hardware-friendly computation |
+
+
