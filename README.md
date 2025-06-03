@@ -31,7 +31,7 @@ The project follows the three tasks outlined in the assignment:
 | Baseline (float32)                | 99.00%   | 807.04 KB  | 206,602     | 0.9505 ms   |
 | Memory Constrained (float32)      | 91.33%   | 34.35 KB   | 8,794       | 0.4450 ms   |
 | Quantized (int8)                  | 85.83%   | 8.203 KB   | 8,400        | 8.5791 ms   |
-| Power-of-2 Quantized              | 83.83%   | 8.203 KB  | *< 36 KB*   | 20.1323 ms   |
+| Power-of-2 Quantized              | 83.83%   | 8.203 KB  | 8,400   | 20.1323 ms   |
 
 
 ---
@@ -41,16 +41,16 @@ The project follows the three tasks outlined in the assignment:
 To validate the results shown above and demonstrate how each task was tackled, refer to the following Jupyter notebooks:
 
 - **Task A:**  
-  [`Training Without Constraints`](notebooks/Task-A.ipynb)  
+  [`Training Without Constraints`](notebooks/TASK-A.ipynb)  
 
 - **Task B:**  
   [`Memory-Constrained Training (≤36 KB)`](notebooks/TASK-B-Part-1.ipynb)  
 
 - **Task B:**  
-  [`No Floating Point / Int8 Quantized Model:`](notebooks/TASK-B-Part-2.ipynb)  
+  [`No Floating Point / Int8 Quantized Model:`](notebooks/TASK-B-Part-2-and-C.ipynb)  
 
 - **Task C:**  
-  [`Power of Two Quantized Model:`](notebooks/TASK-B-Part-2.ipynb)
+  [`Power of Two Quantized Model:`](notebooks/TASK-B-Part-2-and-C.ipynb)
 
 
 These notebooks include full training loops, model summaries, memory profiling, and visualizations to support the results presented.
