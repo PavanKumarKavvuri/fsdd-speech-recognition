@@ -2,7 +2,10 @@ import random
 import numpy as np
 import torch
 import math
+import torchaudio
+import torchaudio.transforms as T
 import os
+import torch.nn.functional as F
 from typing import List, Tuple, Any
 import tempfile
 from torch.nn import Module
@@ -269,3 +272,47 @@ def compute_inference_time(model: Module, test_loader: torch.utils.data.DataLoad
     measurement = timer.blocked_autorange()
     print(f"Median inference time: {measurement.median * 1e3:.4f} ms")
 
+
+def apply_bandpass_filter(waveform, sample_rate):
+    """
+    Applies bandpass filter (300–3000 Hz) and gain normalization to the waveform.
+    Returns the processed waveform.
+    """
+    effects = [
+        ['bandpass', '300', '3000'],  # speech frequency range
+        ['gain', '-n']                # normalize to 0 dB
+    ]
+
+    processed_waveform, _ = torchaudio.sox_effects.apply_effects_tensor(
+        waveform, sample_rate, effects
+    )
+
+    return processed_waveform
+
+
+def pad_or_trim_mfcc(mfcc, max_len=36):
+    """
+    Pads or trims the MFCC array along the time axis to make its shape (n_mfcc, max_len).
+    
+    Parameters:
+        mfcc (np.ndarray): MFCC feature array of shape (n_mfcc, time_steps)
+        max_len (int): Desired number of time steps
+
+    Returns:
+        np.ndarray: MFCC array of shape (n_mfcc, max_len)
+    """
+    _, _, time_steps = mfcc.shape
+
+    pad_width = max_len - time_steps
+
+    if time_steps < max_len:
+        # # Pad with zeros at the end
+        padded_mfcc = F.pad(mfcc, (0, pad_width))
+        return padded_mfcc
+    
+    elif time_steps > max_len:
+        # # Trim to max_len
+        trimmed_mfcc = mfcc[:, :, :max_len]
+        return trimmed_mfcc
+    
+    return mfcc  # Already the correct size
