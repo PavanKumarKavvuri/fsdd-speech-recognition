@@ -40,6 +40,9 @@ The project follows the three tasks outlined in the assignment:
 
 To validate the results shown above and demonstrate how each task was tackled, refer to the following Jupyter notebooks:
 
+-- **Audio Data Analysis**
+   [`FSDD Data Analysis`](notebooks/audio_data_analysis.ipynb)
+
 - **Task A:**  
   [`Training Without Constraints`](notebooks/TASK-A.ipynb)  
 
