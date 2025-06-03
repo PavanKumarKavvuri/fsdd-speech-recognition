@@ -28,10 +28,10 @@ The project follows the three tasks outlined in the assignment:
 
 | Model Variant                     | Accuracy | Layer Params Size | Parameters Count | Inference time 
 |-----------------------------------|----------|------------|------------ |----------|
-| Baseline (float32)                | 99.00%   | 807.04 KB  | 206,602     | --   |
-| Memory Constrained (float32)      | 91.33%   | 34.35 KB   | 8,794       | --   |
-| Quantized (int8)                  | 85.83%   | 8.203 KB   | 8,400        | --   |
-| Power-of-2 Quantized              | 83.83%   | *< 36 KB*  | *< 36 KB*   | --   |
+| Baseline (float32)                | 99.00%   | 807.04 KB  | 206,602     | 0.9505 ms   |
+| Memory Constrained (float32)      | 91.33%   | 34.35 KB   | 8,794       | 0.4450 ms   |
+| Quantized (int8)                  | 85.83%   | 8.203 KB   | 8,400        | 8.5791 ms   |
+| Power-of-2 Quantized              | 83.83%   | 8.203 KB  | *< 36 KB*   | 20.1323 ms   |
 
 
 ---
