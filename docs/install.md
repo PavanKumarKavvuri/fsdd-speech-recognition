@@ -58,6 +58,28 @@ pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
+## 4. Audio Data Setup
+This project uses the [Free Spoken Digits Dataset (FSDD)](https://github.com/Jakobovski/free-spoken-digit-dataset) , a public collection of audio recordings of spoken digits (0–9).
+```bash
+cd data/
+git clone git@github.com:Jakobovski/free-spoken-digit-dataset.git
+cd free-spoken-digit-dataset/recordings
+ls
+```
+
+This should show the full list of recordings cloned from the FSDD repository. Go back to the root of the project and open `config/model_config.yaml`. Update the dataset.path value with the absolute to the recordings folder of free-spoken-digit-dataset folder.
+
+```bash
+# config/model_config.yaml
+
+dataset:
+  name: "Free Spoken Digits Dataset"
+  path: "/paste/the/path/to/free-spoken-digit-dataset/recordings/"  
+  preprocessing:
+    denoise: False
+
+```
+
 ### Next Steps
 
 After installation, you can start by:
