@@ -26,12 +26,12 @@ The project follows the three tasks outlined in the assignment:
 
 ## Sample Results
 
-| Model Variant                     | Accuracy | Model Size | Parameters Count | Inference time 
+| Model Variant                     | Accuracy | Layer Params Size | Parameters Count | Inference time 
 |-----------------------------------|----------|------------|------------ |----------|
 | Baseline (float32)                | 99.00%   | 807.04 KB  | 206,602     | --   |
 | Memory Constrained (float32)      | 91.33%   | 34.35 KB   | 8,794       | --   |
-| Quantized (int8)                  | 93.33%   | 13.00 KB   | 13.00 KB   | --   |
-| Power-of-2 Quantized              | *Tuned*  | *< 36 KB*  | *< 36 KB*  | --  |
+| Quantized (int8)                  | 85.83%   | 8.203 KB   | 8,400        | --   |
+| Power-of-2 Quantized              | 83.83%   | *< 36 KB*  | *< 36 KB*   | --   |
 
 
 ---
@@ -44,7 +44,7 @@ To validate the results shown above and demonstrate how each task was tackled, r
   [`Training Without Constraints`](notebooks/Task-A.ipynb)  
 
 - **Task B:**  
-  [`Memory-Constrained Training (≤36 KB)`](notebooks/TASK-B.ipynb)  
+  [`Memory-Constrained Training (≤36 KB)`](notebooks/TASK-B-Part-1.ipynb)  
 
 - **Task B:**  
   [`No Floating Point / Int8 Quantized Model:`](notebooks/TASK-B-Part-2.ipynb)  
