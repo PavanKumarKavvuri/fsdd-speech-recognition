@@ -67,7 +67,7 @@ cd free-spoken-digit-dataset/recordings
 ls
 ```
 
-This should show the full list of recordings cloned from the FSDD repository. Go back to the root of the project and open `config/model_config.yaml`. Update the dataset.path value with the absolute to the recordings folder of free-spoken-digit-dataset folder.
+This should show the full list of recordings cloned from the FSDD repository. Go back to the root of the project and open `config/model_config.yaml`. Update the `dataset.path` value with the absolute path to the `recordings` folder of `free-spoken-digit-dataset` folder.
 
 ```bash
 # config/model_config.yaml
